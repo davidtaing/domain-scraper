@@ -55,6 +55,7 @@ export function flattenListingData({ listing }) {
 export async function getListings(postCode, propertyType, pageNumber = 1) {
   const requestBody = createRequestBody(postCode, propertyType, pageNumber);
   const response = await makeApiRequest(requestBody);
+
   const listings = response.data.map(item => flattenListingData(item));
 
   try {
@@ -71,8 +72,8 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
 }
 
 async function main() {
-  // TODO iterate through all suburbs
-    // TODO iterate through all property types
+  // iterate through all suburbs
+    // iterate through all property types
       // build request body
       // query api
       // TODO flatten object a.k.a massage data
@@ -81,7 +82,11 @@ async function main() {
       // check response headers for x-total-count
         // rerun for any additional pages
 
-  await getListings(postCodes[0], propertyTypes[0]);
+  for (const postCode of postCodes) {
+    for (const propertyType of propertyTypes) {
+      await getListings(postCode, propertyType);
+    }
+  }
 }
 
 main();
