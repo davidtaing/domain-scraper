@@ -62,19 +62,22 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
   const response = await makeApiRequest(requestBody);
 
   // Early exit if no results are found
-  if (response.data.length === 0)
-    return;
+  if (response.data.length === 0) return;
   
   const listings = response.data.map(item => flattenListingData(item));
+  
+  // recurse if there are additional pages of listings
+  if (response.headers["x-total-count"] > pageNumber * pageSize) {
+    listings.concat(await getListings(postCode, propertyType, pageNumber + 1));
+  }
 
+  await writeListingsToFile(postCode, listings);
+}
+
+export async function writeListingsToFile(postCode, listings) {
   try {
-    const fileName = `./data/${postCode}_${propertyType}_pg${pageNumber}.json`;
+    const fileName = `./data/${postCode}.json`;
     fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
-
-    // recurse if there are additional pages of listings
-    if (response.headers["x-total-count"] > pageNumber * pageSize) {
-      getListings(postCode, propertyType, pageNumber + 1);
-    }
   } catch (err) {
     console.error(err);
   }
