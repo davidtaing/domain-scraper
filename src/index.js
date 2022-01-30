@@ -5,22 +5,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const pageSize = 200;
-// Postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
+// postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
 const postCodes = ["2140", "2137", "2138"]
-// Property Types from the Domain API
+// property Types from the Domain API
 const propertyTypes = ["ApartmentUnitFlat", "Duplex", "House", "Townhouse", "SemiDetached", "Studio"];
 
 async function main() {
-  // iterate through all suburbs
-    // iterate through all property types
-      // build request body
-      // query api
-      // flatten object a.k.a massage data
-      // save to file
-      
-      // check response headers for x-total-count
-        // rerun for any additional pages
-
   for (const postCode of postCodes) {
     let listings = [];
 
@@ -38,7 +28,7 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
   const requestBody = createRequestBody(postCode, propertyType, pageNumber);
   const response = await makeApiRequest(requestBody);
 
-  // Early exit if no results are found
+  // early exit if no results are found
   if (response.data.length === 0) return [];
   
   let listings = response.data.map(item => flattenListingData(item));
@@ -87,21 +77,22 @@ export async function makeApiRequest(queryBody, apiKey = process.env.DOMAIN_API_
  */
 export function flattenListingData({ listing }) {
   const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
-  
-  const data = {
+  return {
     _id: id,
     ...priceDetails,
     ...propertyDetails,
     ...otherListingProps
   };
-
-  return data;
 }
 
 export async function writeListingsToFile(postCode, listings) {
   try {
     const fileName = `./data/${postCode}.json`;
-    fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
+
+    fs.writeFile(fileName, JSON.stringify(listings))
+      .then(
+        () => console.log(`Wrote listings to ${fileName}`)
+      );
   } catch (err) {
     console.error(err);
   }
