@@ -56,6 +56,10 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
   const requestBody = createRequestBody(postCode, propertyType, pageNumber);
   const response = await makeApiRequest(requestBody);
 
+  // Early exit if no results are found
+  if (response.data.length === 0)
+    return;
+  
   const listings = response.data.map(item => flattenListingData(item));
 
   try {
