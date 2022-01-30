@@ -10,6 +10,47 @@ const postCodes = ["2140", "2137", "2138"]
 // Property Types from the Domain API
 const propertyTypes = ["ApartmentUnitFlat", "Duplex", "House", "Townhouse", "SemiDetached", "Studio"];
 
+async function main() {
+  // iterate through all suburbs
+    // iterate through all property types
+      // build request body
+      // query api
+      // flatten object a.k.a massage data
+      // save to file
+      
+      // check response headers for x-total-count
+        // rerun for any additional pages
+
+  for (const postCode of postCodes) {
+    let listings = [];
+
+    for (const propertyType of propertyTypes) {
+      const data = await getListings(postCode, propertyType)
+      if (data.length > 0)
+        listings = listings.concat(data);
+    }
+
+    writeListingsToFile(postCode, listings);
+  }
+}
+
+export async function getListings(postCode, propertyType, pageNumber = 1) {
+  const requestBody = createRequestBody(postCode, propertyType, pageNumber);
+  const response = await makeApiRequest(requestBody);
+
+  // Early exit if no results are found
+  if (response.data.length === 0) return [];
+  
+  let listings = response.data.map(item => flattenListingData(item));
+  
+  // recurse if there are additional pages of listings
+  if (response.headers["x-total-count"] > pageNumber * pageSize) {
+    listings = listings.concat(await getListings(postCode, propertyType, pageNumber + 1));
+  }
+
+  return listings;
+}
+
 export function createRequestBody(postcode, propertyType, pageNumber = 1) {
   return {
     "listingType": "Rent",
@@ -57,51 +98,12 @@ export function flattenListingData({ listing }) {
   return data;
 }
 
-export async function getListings(postCode, propertyType, pageNumber = 1) {
-  const requestBody = createRequestBody(postCode, propertyType, pageNumber);
-  const response = await makeApiRequest(requestBody);
-
-  // Early exit if no results are found
-  if (response.data.length === 0) return;
-  
-  let listings = response.data.map(item => flattenListingData(item));
-  
-  // recurse if there are additional pages of listings
-  if (response.headers["x-total-count"] > pageNumber * pageSize) {
-    listings = listings.concat(await getListings(postCode, propertyType, pageNumber + 1));
-  }
-
-  return listings;
-}
-
 export async function writeListingsToFile(postCode, listings) {
   try {
     const fileName = `./data/${postCode}.json`;
     fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
   } catch (err) {
     console.error(err);
-  }
-}
-
-async function main() {
-  // iterate through all suburbs
-    // iterate through all property types
-      // build request body
-      // query api
-      // flatten object a.k.a massage data
-      // save to file
-      
-      // check response headers for x-total-count
-        // rerun for any additional pages
-
-  for (const postCode of postCodes) {
-    let listings = [];
-
-    for (const propertyType of propertyTypes) {
-      listings = listings.concat(await getListings(postCode, propertyType));
-    }
-
-    writeListingsToFile(postCode, listings);
   }
 }
 
