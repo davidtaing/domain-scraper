@@ -1,4 +1,4 @@
-import fs, { writeFile } from "node:fs/promises";
+import fs from "node:fs/promises";
 import axios from "axios";
 import dotenv from "dotenv";
 
@@ -40,12 +40,19 @@ export const makeApiRequest = async (queryBody, apiKey = process.env.DOMAIN_API_
   })
 }
 
+export const flattenListingData = ({ listing }) => {
+  const data = {
+    ...listing
+  };
+
+  return data;
+}
+
 export const main = async () => {
   // TODO iterate through all suburbs
     // TODO iterate through all property types
       // build request body
       // query api
-      // TODO process response headers
       // TODO flatten object a.k.a massage data
       // TODO save to file
       
@@ -54,7 +61,14 @@ export const main = async () => {
 
   const requestBody = createRequestBody(postCodes[0], propertyTypes[0]);
   const response = await makeApiRequest(requestBody);
-  console.log(response);
+  const listings = response.data.map(item => flattenListingData(item));
+
+  try {
+    const fileName = `./data/${postCodes[0]}_${propertyTypes[0]}.json`;
+    fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 main();
