@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node -- src/index.js"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davidtaing/domain-scraper.git"
@@ -21,6 +22,11 @@
     "@babel/core": "^7.16.12",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "axios": "^0.25.0",
+    "dotenv": "^14.3.2"
   }
 }
