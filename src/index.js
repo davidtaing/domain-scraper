@@ -54,10 +54,10 @@ export const main = async () => {
       // build request body
       // query api
       // TODO flatten object a.k.a massage data
-      // TODO save to file
+      // save to file
       
-      // check response headers for x-total-count
-        // rerun for any additional pages
+      // TODO check response headers for x-total-count
+        // TODO rerun for any additional pages
 
   const requestBody = createRequestBody(postCodes[0], propertyTypes[0]);
   const response = await makeApiRequest(requestBody);
