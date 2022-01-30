@@ -60,6 +60,11 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
   try {
     const fileName = `./data/${postCode}_${propertyType}_pg${pageNumber}.json`;
     fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
+
+    // recurse if there are additional pages of listings
+    if (response.headers["x-total-count"] > pageNumber * pageSize) {
+      getListings(postCode, propertyType, pageNumber + 1);
+    }
   } catch (err) {
     console.error(err);
   }
