@@ -45,8 +45,13 @@ export async function makeApiRequest(queryBody, apiKey = process.env.DOMAIN_API_
  * Flattens listings data to make it easier manipulate in the MongoDB database
  */
 export function flattenListingData({ listing }) {
+  const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
+  
   const data = {
-    ...listing
+    _id: id,
+    ...priceDetails,
+    ...propertyDetails,
+    ...otherListingProps
   };
 
   return data;
@@ -80,7 +85,7 @@ async function main() {
     // iterate through all property types
       // build request body
       // query api
-      // TODO flatten object a.k.a massage data
+      // flatten object a.k.a massage data
       // save to file
       
       // check response headers for x-total-count
