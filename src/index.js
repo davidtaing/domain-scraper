@@ -64,14 +64,14 @@ export async function getListings(postCode, propertyType, pageNumber = 1) {
   // Early exit if no results are found
   if (response.data.length === 0) return;
   
-  const listings = response.data.map(item => flattenListingData(item));
+  let listings = response.data.map(item => flattenListingData(item));
   
   // recurse if there are additional pages of listings
   if (response.headers["x-total-count"] > pageNumber * pageSize) {
-    listings.concat(await getListings(postCode, propertyType, pageNumber + 1));
+    listings = listings.concat(await getListings(postCode, propertyType, pageNumber + 1));
   }
 
-  await writeListingsToFile(postCode, listings);
+  return listings;
 }
 
 export async function writeListingsToFile(postCode, listings) {
@@ -95,9 +95,13 @@ async function main() {
         // rerun for any additional pages
 
   for (const postCode of postCodes) {
+    let listings = [];
+
     for (const propertyType of propertyTypes) {
-      await getListings(postCode, propertyType);
+      listings = listings.concat(await getListings(postCode, propertyType));
     }
+
+    writeListingsToFile(postCode, listings);
   }
 }
 
