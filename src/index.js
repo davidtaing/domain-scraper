@@ -4,12 +4,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const pageSize = 200;
 // Postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
 const postCodes = ["2140", "2137", "2138"]
 // Property Types from the Domain API
 const propertyTypes = ["ApartmentUnitFlat", "Duplex", "House", "Townhouse", "SemiDetached", "Studio"];
 
-export const createRequestBody = (postcode, propertyType, pageNumber = 1) => {
+export function createRequestBody(postcode, propertyType, pageNumber = 1) {
   return {
     "listingType": "Rent",
     "propertyTypes": [propertyType],
@@ -24,12 +25,12 @@ export const createRequestBody = (postcode, propertyType, pageNumber = 1) => {
     ],
     "excludePriceWithheld": false,
     "excludeDepositTaken": false,
-    "pageSize": 200,
+    pageSize,
     pageNumber
   }
 }
 
-export const makeApiRequest = async (queryBody, apiKey = process.env.DOMAIN_API_KEY) => {
+export async function makeApiRequest(queryBody, apiKey = process.env.DOMAIN_API_KEY) {
   return await axios({
     method: "POST",
     url: "https://api.domain.com.au/v1/listings/residential/_search",
@@ -40,7 +41,10 @@ export const makeApiRequest = async (queryBody, apiKey = process.env.DOMAIN_API_
   })
 }
 
-export const flattenListingData = ({ listing }) => {
+/**
+ * Flattens listings data to make it easier manipulate in the MongoDB database
+ */
+export function flattenListingData({ listing }) {
   const data = {
     ...listing
   };
@@ -48,7 +52,20 @@ export const flattenListingData = ({ listing }) => {
   return data;
 }
 
-export const main = async () => {
+export async function getListings(postCode, propertyType, pageNumber = 1) {
+  const requestBody = createRequestBody(postCode, propertyType, pageNumber);
+  const response = await makeApiRequest(requestBody);
+  const listings = response.data.map(item => flattenListingData(item));
+
+  try {
+    const fileName = `./data/${postCode}_${propertyType}_pg${pageNumber}.json`;
+    fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function main() {
   // TODO iterate through all suburbs
     // TODO iterate through all property types
       // build request body
@@ -56,19 +73,10 @@ export const main = async () => {
       // TODO flatten object a.k.a massage data
       // save to file
       
-      // TODO check response headers for x-total-count
-        // TODO rerun for any additional pages
+      // check response headers for x-total-count
+        // rerun for any additional pages
 
-  const requestBody = createRequestBody(postCodes[0], propertyTypes[0]);
-  const response = await makeApiRequest(requestBody);
-  const listings = response.data.map(item => flattenListingData(item));
-
-  try {
-    const fileName = `./data/${postCodes[0]}_${propertyTypes[0]}.json`;
-    fs.writeFile(fileName, JSON.stringify(listings)).then(() => console.log(`Wrote listings to ${fileName}`));
-  } catch (err) {
-    console.error(err);
-  }
+  await getListings(postCodes[0], propertyTypes[0]);
 }
 
 main();
