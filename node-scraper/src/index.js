@@ -77,9 +77,12 @@ export async function makeApiRequest(queryBody, apiKey = process.env.DOMAIN_API_
  */
 export function flattenListingData({ listing }) {
   const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
+  const price = priceDetails.displayPrice.replace(/[^\d.-]/g, '').split("-");
+
   return {
     _id: id,
     ...priceDetails,
+    displayPrice: parseInt(price[0]),
     ...propertyDetails,
     ...otherListingProps
   };
