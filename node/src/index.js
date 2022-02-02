@@ -1,5 +1,6 @@
 import connectDb from "./database.js";
 import ListingsService from "./listing/listings.service.js";
+import { writeListingsToFile } from "./utils.js";
 
 // postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
 const postCodes = ["2140", "2137", "2138"]
@@ -18,7 +19,7 @@ async function main() {
         listings = listings.concat(data);
     }
 
-    ListingsService.writeListingsToFile(postCode, listings);
+    writeListingsToFile(postCode, listings);
   }
 }
 

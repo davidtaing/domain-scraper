@@ -1,5 +1,3 @@
-import fs from "node:fs/promises";
-import { resolve } from "node:path";
 import axios from "axios";
 
 import config from "../config.js";
@@ -67,18 +65,6 @@ class ListingsService {
       ...propertyDetails,
       ...otherListingProps
     };
-  }
-  
-  static async writeListingsToFile(postCode, listings) {
-    try {
-      const fileName = resolve(`./data/${postCode}.json`);
-      fs.writeFile(fileName, JSON.stringify(listings))
-        .then(
-          () => console.log(`Wrote listings to ${fileName}`)
-        );
-    } catch (err) {
-      console.error(err);
-    }
   }
 }
 
