@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import config from "../config.js";
+import Listing from "../models/listing.model.js";
 
 class ListingsService {
   static async getListings(postCode, propertyType, pageNumber = 1, pageSize = 200) {
@@ -65,6 +66,10 @@ class ListingsService {
       ...propertyDetails,
       ...otherListingProps
     };
+  }
+
+  static async saveListingsToDb(listings) {
+    return Listing.insertMany(listings);
   }
 }
 

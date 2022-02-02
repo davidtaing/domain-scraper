@@ -1,6 +1,12 @@
-import { model, Schema } from "mongoose";
+import mongoose from "mongoose";
+const { model, Schema } = mongoose;
 
-// mixed "anything goes" Schema because
-const Listing = model("Listing", new Schema({ any: Schema.Types.Mixed }));
+// "strict: false" due to mixed column datatypes
+const Listing = model(
+  "Listing", 
+  new Schema({
+    _id: Schema.Types.Number,
+  }, { strict: false })
+);
 
 export default Listing;

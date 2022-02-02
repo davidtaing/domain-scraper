@@ -12,6 +12,8 @@ const propertyTypes = ["ApartmentUnitFlat", "Duplex", "House", "Townhouse", "Sem
 async function main() {
   await connectDb();
 
+  let promises = [];
+
   for (const postCode of postCodes) {
     let listings = [];
 
@@ -22,8 +24,12 @@ async function main() {
     }
     
     const filepath = resolve(`./data/${postCode}.json`);
-    writeToJson(listings, filepath);
+    promises.concat(writeToJson(listings, filepath));
+    promises.concat(ListingsService.saveListingsToDb(listings));
   }
+
+  Promise.resolve(promises)
+    .then(() => console.log("Persisted Data to MongoDB & JSON."));
 }
 
 main();
