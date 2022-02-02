@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import { resolve } from "node:path";
 import axios from "axios";
 import dotenv from "dotenv";
 
@@ -90,8 +91,7 @@ export function flattenListingData({ listing }) {
 
 export async function writeListingsToFile(postCode, listings) {
   try {
-    const fileName = `./data/${postCode}.json`;
-
+    const fileName = resolve(`./data/${postCode}.json`);
     fs.writeFile(fileName, JSON.stringify(listings))
       .then(
         () => console.log(`Wrote listings to ${fileName}`)
