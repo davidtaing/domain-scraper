@@ -40,13 +40,13 @@ class ListingsService {
     }
   }
   
-  static async makeApiRequest(queryBody, apiKey = config.DOMAIN_API_KEY) {
+  static async makeApiRequest(queryBody) {
     return await axios({
       method: "POST",
       url: "https://api.domain.com.au/v1/listings/residential/_search",
       data: queryBody,
       headers: {
-        "X-Api-Key": apiKey,
+        "X-Api-Key": config.DOMAIN_API_KEY,
       }
     })
   }
