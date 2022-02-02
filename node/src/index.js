@@ -1,9 +1,7 @@
 import fs from "node:fs/promises";
 import { resolve } from "node:path";
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
+import config from "./config.js";
 
 const pageSize = 200;
 // postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
@@ -62,7 +60,7 @@ export function createRequestBody(postcode, propertyType, pageNumber = 1) {
   }
 }
 
-export async function makeApiRequest(queryBody, apiKey = process.env.DOMAIN_API_KEY) {
+export async function makeApiRequest(queryBody, apiKey = config.DOMAIN_API_KEY) {
   return await axios({
     method: "POST",
     url: "https://api.domain.com.au/v1/listings/residential/_search",
