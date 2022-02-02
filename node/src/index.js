@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { resolve } from "node:path";
 import axios from "axios";
 import config from "./config.js";
+import connectDb from "./database";
 
 const pageSize = 200;
 // postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
@@ -10,6 +11,8 @@ const postCodes = ["2140", "2137", "2138"]
 const propertyTypes = ["ApartmentUnitFlat", "Duplex", "House", "Townhouse", "SemiDetached", "Studio"];
 
 async function main() {
+  await connectDb();
+
   for (const postCode of postCodes) {
     let listings = [];
 
