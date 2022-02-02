@@ -1,12 +1,10 @@
 import fs from "node:fs/promises";
-import { resolve } from "node:path";
 
-export async function writeListingsToFile(postCode, listings) {
+export async function writeToJson(data, path) {
   try {
-    const fileName = resolve(`./data/${postCode}.json`);
-    fs.writeFile(fileName, JSON.stringify(listings))
+    fs.writeFile(path, JSON.stringify(data))
       .then(
-        () => console.log(`Wrote listings to ${fileName}`)
+        () => console.log(`Wrote to ${path}`)
       );
   } catch (err) {
     console.error(err);
