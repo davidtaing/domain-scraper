@@ -11,7 +11,9 @@ class ListingsService {
     // early exit if no results are found
     if (response.data.length === 0) return [];
     
-    let listings = response.data.map(item => this.flattenListingData(item));
+    let listings = response.data
+      .map(item => this.selectPropsFromListing(item))
+      .map(item => this.flattenListingData(item));
     
     // recurse if there are additional pages of listings
     if (response.headers["x-total-count"] > pageNumber * pageSize) {
@@ -52,16 +54,30 @@ class ListingsService {
     })
   }
   
+  // selects relevant properties from raw listing data
+  static selectPropsFromListing({ listing }) {
+    const { id, listingType, priceDetails, propertyDetails, dateAvailable, dateListed, listingSlug } = listing
+
+    return {
+      id,
+      listingType,
+      priceDetails,
+      propertyDetails,
+      dateAvailable,
+      dateListed,
+      listingSlug
+    };
+  }
+
   /**
    * Flattens listings data to make it easier manipulate in the MongoDB database
    */
-  static flattenListingData({ listing }) {
+  static flattenListingData(listing) {
     const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
     const price = priceDetails.displayPrice.replace(/[^\d.-]/g, '').split("-");
   
     return {
       _id: id,
-      ...priceDetails,
       displayPrice: parseInt(price[0]),
       ...propertyDetails,
       ...otherListingProps
