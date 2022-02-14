@@ -1,0 +1,19 @@
+[
+  { "propertyType": "ApartmentUnitFlat", "bedrooms": 1 },
+  { "propertyType": "ApartmentUnitFlat", "bedrooms": 2 },
+  { "propertyType": "ApartmentUnitFlat", "bedrooms": 3 },
+  { "propertyType": "Duplex", "bedrooms": 2 },
+  { "propertyType": "Duplex", "bedrooms": 3 },
+  { "propertyType": "Duplex", "bedrooms": 4 },
+  { "propertyType": "Duplex", "bedrooms": 5 },
+  { "propertyType": "House", "bedrooms": 2 },
+  { "propertyType": "House", "bedrooms": 3 },
+  { "propertyType": "House", "bedrooms": 4 },
+  { "propertyType": "House", "bedrooms": 5 },
+  { "propertyType": "Townhouse", "bedrooms": 2 },
+  { "propertyType": "Townhouse", "bedrooms": 3 },
+  { "propertyType": "Townhouse", "bedrooms": 4 },
+  { "propertyType": "SemiDetached", "bedrooms": 2 },
+  { "propertyType": "SemiDetached", "bedrooms": 3 },
+  { "propertyType": "Studio", "bedrooms": 0 }
+]
