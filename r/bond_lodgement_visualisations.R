@@ -34,7 +34,7 @@ for (postcode in postcodes) {
         print(path);
         
         p <- ggplot(bonds_by_type_and_bedrooms, aes(Rent)) + 
-          geom_bar(fill = "skyblue4") + 
+          geom_bar(fill = "firebrick") + 
           labs(x = "Rent Per Week", y = "Property Count", title = title, subtitle = subtitle) +
           theme(axis.text.x = element_text(angle=90));
         p
