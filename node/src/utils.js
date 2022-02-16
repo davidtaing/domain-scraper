@@ -10,3 +10,7 @@ export async function writeToJson(data, path) {
     console.error(err);
   }
 }
+
+export function getCurrentDateString() {
+  return (new Date().toJSON().slice(0, 10));
+}

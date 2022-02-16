@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 
 import connectDb from "./database.js";
 import ListingsService from "./listing/listings.service.js";
-import { writeToJson } from "./utils.js";
+import { writeToJson, getCurrentDateString } from "./utils.js";
 
 // postcodes for Homebush, Homebush West, North Strathfield, Concord & Concord West
 const postCodes = ["2140", "2137", "2138"]
@@ -23,7 +23,7 @@ async function main() {
         listings = listings.concat(data);
     }
     
-    const filepath = resolve(`./data/${postCode}.json`);
+    const filepath = resolve(`./data/${postCode}_${getCurrentDateString()}.json`);
     promises.concat(writeToJson(listings, filepath));
     promises.concat(ListingsService.saveListingsToDb(listings));
   }
