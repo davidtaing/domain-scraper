@@ -18,10 +18,9 @@ processListings <- function(postcode, propertyType, bedrooms) {
   mongoose_query_string <- toJSON(unbox(filter), pretty=TRUE, raw="mongo");
   print(mongoose_query_string);
   # Query DB
-  #m$find(mongoose_query_string) %>%
-  #    na.omit("displayPrice") -> results
-  results <- m$find(mongoose_query_string)
-  
+  m$find(mongoose_query_string) %>%
+      na.omit("displayPrice") -> results
+
   if (nrow(results) > 0) {
     print(str_c("Processing ", nrow(results), " results"))
     # Create Title for Plot & File Path
