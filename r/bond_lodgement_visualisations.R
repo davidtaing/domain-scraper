@@ -5,7 +5,7 @@ bond_period <- "January-2022"
 postcodes <- c("2137", "2138", "2140")
 dwelling_types <- c("F", "H", "T", "O", "U");
 
-target_plot_root_path <- "../plots/bond_lodgements"
+output_dir_root_path <- "../plots/bond_lodgements"
 
 bond_data <- readxl::read_excel(bond_lodgements_path)
 
@@ -32,7 +32,7 @@ for (postcode in postcodes) {
         filename <- str_interp("${title}.png")
         subtitle <- str_c("(N = ", count(bonds_by_type_and_bedrooms), ")")
         
-        target_plot_path <- target_plot_root_path
+        output_dir_path <- str_interp("${output_dir_root_path}/${postcode}");
         
         print(filename);
         
@@ -41,7 +41,7 @@ for (postcode in postcodes) {
           labs(x = "Rent Per Week", y = "Property Count", title = title, subtitle = subtitle) +
           theme(axis.text.x = element_text(angle=90));
         
-        ggsave(path=target_plot_path, filename=filename, plot=last_plot(), device = "png")
+        ggsave(path=output_dir_path, filename=filename, plot=last_plot(), device = "png")
       }
     }
   }
