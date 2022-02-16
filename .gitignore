@@ -110,3 +110,4 @@ dist
 # R files
 r/.Rhistory
 r project/.RData
+r/.DS_Store
