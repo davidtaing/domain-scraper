@@ -5,6 +5,8 @@ bond_period <- "January-2022"
 postcodes <- c("2137", "2138", "2140")
 dwelling_types <- c("F", "H", "T", "O", "U");
 
+target_plot_root_path <- "../plots/bond_lodgements"
+
 bond_data <- readxl::read_excel(bond_lodgements_path)
 
 for (postcode in postcodes) {
@@ -27,11 +29,10 @@ for (postcode in postcodes) {
         
         # Create Title for Plot & File Path
         title <- str_c(postcode, "_" , dwelling_type, "_", bedroom_amount, "BR_", bond_period)
-        path <- str_c(title, ".png")
+        filename <- str_c(title, ".png")
         subtitle <- str_c("(N = ", count(bonds_by_type_and_bedrooms), ")")
         
-        print(title);
-        print(path);
+        print(filename);
         
         p <- ggplot(bonds_by_type_and_bedrooms, aes(Rent)) + 
           geom_bar(fill = "firebrick") + 
@@ -39,7 +40,7 @@ for (postcode in postcodes) {
           theme(axis.text.x = element_text(angle=90));
         p
         
-        ggsave(path="../plots/bond_lodgements", filename=path, plot=last_plot(), device = "png")
+        ggsave(path=target_plot_root_path, filename=filename, plot=last_plot(), device = "png")
       }
     }
   }
