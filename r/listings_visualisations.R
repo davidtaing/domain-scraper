@@ -31,7 +31,7 @@ processListings <- function(postcode, propertyType, bedrooms) {
     
     p <- ggplot(results, aes(displayPrice)) + geom_bar(fill = "skyblue4") + labs(x = "Rent Per Week", y = "Property Count", title = title, subtitle = subtitle);
     
-    ggsave(path="../plots", filename=path, plot=last_plot())
+    ggsave(path="../plots/listings", filename=path, plot=last_plot())
   } else {
     print("No results found.")
   }
