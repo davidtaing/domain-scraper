@@ -28,10 +28,8 @@ processListings <- function(postcode, propertyType, bedrooms) {
     path <- str_c(title, ".png")
     subtitle <- str_c("(N = ", count(results), ")")
     print(path)
-    print(path)
     
     p <- ggplot(results, aes(displayPrice)) + geom_bar(fill = "skyblue4") + labs(x = "Rent Per Week", y = "Property Count", title = title, subtitle = subtitle);
-    p
     
     ggsave(path="../plots", filename=path, plot=last_plot())
   } else {

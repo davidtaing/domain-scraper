@@ -40,7 +40,6 @@ for (postcode in postcodes) {
           geom_bar(fill = "firebrick") + 
           labs(x = "Rent Per Week", y = "Property Count", title = title, subtitle = subtitle) +
           theme(axis.text.x = element_text(angle=90));
-        p
         
         ggsave(path=target_plot_path, filename=filename, plot=last_plot(), device = "png")
       }
