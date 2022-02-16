@@ -24,7 +24,7 @@ processListings <- function(postcode, propertyType, bedrooms) {
   if (nrow(results) > 0) {
     print(str_c("Processing ", nrow(results), " results"))
     # Create Title for Plot & File Path
-    title <- str_c(postcode, "_" , propertyType, "_", bedrooms ,"BR_", Sys.Date())
+    title <- str_interp("${postcode}_${propertyType}_${bedrooms}BR_${Sys.Date()}")
     path <- str_c(title, ".png")
     subtitle <- str_c("(N = ", count(results), ")")
     print(path)
