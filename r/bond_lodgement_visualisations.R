@@ -28,9 +28,11 @@ for (postcode in postcodes) {
         print(str_c("Processing ", nrow(bonds_by_type_and_bedrooms), " results"))
         
         # Create Title for Plot & File Path
-        title <- str_c(postcode, "_" , dwelling_type, "_", bedroom_amount, "BR_", bond_period)
-        filename <- str_c(title, ".png")
+        title <- str_interp("${postcode}_${dwelling_type}_${bedroom_amount}BR_${bond_period}")
+        filename <- str_interp("${title}.png")
         subtitle <- str_c("(N = ", count(bonds_by_type_and_bedrooms), ")")
+        
+        target_plot_path <- target_plot_root_path
         
         print(filename);
         
@@ -40,7 +42,7 @@ for (postcode in postcodes) {
           theme(axis.text.x = element_text(angle=90));
         p
         
-        ggsave(path=target_plot_root_path, filename=filename, plot=last_plot(), device = "png")
+        ggsave(path=target_plot_path, filename=filename, plot=last_plot(), device = "png")
       }
     }
   }
