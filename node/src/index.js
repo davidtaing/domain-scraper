@@ -29,7 +29,10 @@ async function main() {
   }
 
   Promise.resolve(promises)
-    .then(() => console.log("Persisted Data to MongoDB & JSON."));
+    .then(() => {
+      console.log("Persisted Data to MongoDB & JSON.");
+      process.exit(0);
+    });
 }
 
 main();
