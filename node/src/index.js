@@ -24,11 +24,11 @@ async function main() {
     }
     
     const filepath = resolve(`./data/${postCode}_${getCurrentDateString()}.json`);
-    promises.concat(writeToJson(listings, filepath));
-    promises.concat(ListingsService.saveListingsToDb(listings));
+    promises = promises.concat(writeToJson(listings, filepath));
+    promises = promises.concat(ListingsService.saveListingsToDb(listings));
   }
 
-  Promise.resolve(promises)
+  Promise.all(promises)
     .then(() => {
       console.log("Persisted Data to MongoDB & JSON.");
       process.exit(0);
