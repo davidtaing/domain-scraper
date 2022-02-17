@@ -89,7 +89,13 @@ class ListingsService {
   }
 
   static cleanDisplayPrice(displayPrice) {
-    return displayPrice.replace(/[^\d.-]/g, '').split("-");
+    const strings = displayPrice.replace(/[^\d.]/g, ' ').trim().split(/\s+/);
+
+    for (const string of strings) {
+      if (string.length >= 3) return string;
+    }
+
+    return "";
   }
 }
 
