@@ -74,7 +74,7 @@ class ListingsService {
    */
   static flattenListingData(listing) {
     const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
-    const price = priceDetails.displayPrice.replace(/[^\d.-]/g, '').split("-");
+    const price = this.cleanDisplayPrice(priceDetails.displayPrice);
   
     return {
       _id: id,
@@ -86,6 +86,10 @@ class ListingsService {
 
   static async saveListingsToDb(listings) {
     return Listing.insertMany(listings);
+  }
+
+  static cleanDisplayPrice(displayPrice) {
+    return displayPrice.replace(/[^\d.-]/g, '').split("-");
   }
 }
 
