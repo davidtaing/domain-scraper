@@ -74,11 +74,11 @@ class ListingsService {
    */
   static flattenListingData(listing) {
     const { id, priceDetails, propertyDetails, ...otherListingProps } = listing;
-    const price = this.cleanDisplayPrice(priceDetails.displayPrice);
+    const price = parseInt(this.cleanDisplayPrice(priceDetails.displayPrice));
   
     return {
       _id: id,
-      displayPrice: parseInt(price[0]),
+      displayPrice: price,
       ...propertyDetails,
       ...otherListingProps
     };
