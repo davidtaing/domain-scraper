@@ -1,5 +1,5 @@
 # domain-scraper
-Pulls rental listings data from the Domain.com.au Developer API and generates bar charts for each suburb and catergory.
+Pulls rental listings data from the Domain.com.au Developer API and generates bar charts for each postcode and category.
 
 Written in JavaScript and R.
 
